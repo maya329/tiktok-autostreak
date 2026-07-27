@@ -1,6 +1,27 @@
 # TikTok Streak Bot
 
-Automates sending a daily message to maintain TikTok streaks. Built to survive silent UI updates, iframe blocks, and run reliably on cheap Low RAM VPS instances.
+An unofficial community-maintained fork of the original TikTok Streak Bot by thetrekir.
+
+This project automates sending a daily message to maintain TikTok streaks. It is designed to survive TikTok UI changes, iframe blocks, and run reliably on low-memory VPS instances.
+
+The original repository by thetrekir is no longer available. This fork continues development by preserving the original functionality while adding bug fixes, deployment improvements, and compatibility updates.
+
+## Disclaimer
+
+This project is not affiliated with, endorsed by, or sponsored by TikTok or the original author. It is an independent community fork intended to preserve a useful open-source project.
+
+## What’s New in this Fork
+
+Compared to the original project, this fork includes:
+
+* Better resilience against TikTok UI updates
+* Automatic iframe detection and handling
+* Improved message verification and retry logic
+* Better low-memory VPS support
+* Docker deployment
+* Windows Service support
+* Improved process cleanup
+* Ongoing maintenance and bug fixes
 
 ## Core Mechanics
 
@@ -13,8 +34,8 @@ Automates sending a daily message to maintain TikTok streaks. Built to survive s
 
 1.  **Clone the Repo:**
     ```bash
-    git clone https://github.com/thetrekir/tiktok-streak-bot.git
-    cd tiktok-streak-bot
+    git clone https://github.com/maya329/tiktok-autostreak.git
+    cd tiktok-autostreak
     ```
 
 2.  **Get Your Cookies:**
@@ -89,6 +110,18 @@ If you just want to run the script directly.
    ```
 *(For a background run on Windows without a console window, use `pythonw.exe main.py`)*
 
+## Credits
+
+This project is based on the original TikTok Streak Bot created by thetrekir.
+
+Although the original repository is no longer available, this fork would not exist without the original work. Many thanks to the original author for creating and open-sourcing the project.
+
+This repository continues development independently and welcomes community contributions.
+
 ## Logs & Debugging
 
 The bot writes all operations, retries, and errors to `tiktok_bot.txt` (or whatever you named it in `config.json`). If a message fails, check this log. It will tell you if the element wasn't found, if it got stuck in an iframe, or if the cookie expired.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
