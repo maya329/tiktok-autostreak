@@ -32,3 +32,10 @@ desktop.ini
 .idea/
 *.swp
 *.swo
+
+.env
+.env.*
+data/
+debug-*.png
+debug-*.html
+main.py.backup.*

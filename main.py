@@ -158,8 +158,8 @@ MESSAGE_LIST_CONTAINER_XPATH = "//*[@data-e2e='dm-new-conversation-list']"
 CONVERSATION_ITEM_XPATH      = "//*[@data-e2e='dm-new-conversation-item']"
 NICKNAME_CLASS_PARTIAL       = "PInfoNickname"
 NICKNAME_XPATH_INSIDE_ITEM   = f".//p[contains(@class, '{NICKNAME_CLASS_PARTIAL}')]"
-CLICK_TARGET_XPATH           = '//*[@id="main-content-messages"]/div/div[3]/div[4]/div'
-WRITE_TARGET_XPATH           = '//*[@id="main-content-messages"]/div/div[3]/div[4]/div/div[1]/div/div[2]/div[2]/div/div/div/div'
+CLICK_TARGET_XPATH = '//div[@contenteditable="true" and @role="textbox" and @aria-label="Send a message..."]' 
+WRITE_TARGET_XPATH = CLICK_TARGET_XPATH
 TOAST_XPATH                  = "//li[@data-sonner-toast]"
 MAX_RETRIES                  = 3
 RETRY_DELAY_SECONDS          = 12
@@ -353,6 +353,43 @@ def send_message_in_open_chat(driver):
             time.sleep(random.uniform(1.5, 2.5))
         except TimeoutException:
             logging.error("Click target not found.")
+
+            # Capture browser state for debugging
+            try:
+                debug_dir = "/app/data"
+                os.makedirs(debug_dir, exist_ok=True)
+
+                screenshot = os.path.join(debug_dir, "debug-chat.png")
+                html_file = os.path.join(debug_dir, "debug-chat.html")
+
+                driver.save_screenshot(screenshot)
+
+                with open(html_file, "w", encoding="utf-8") as f:
+                    f.write(driver.page_source)
+
+                logging.error(f"DEBUG URL: {driver.current_url}")
+                logging.error(f"DEBUG screenshot: {screenshot}")
+                logging.error(f"DEBUG HTML: {html_file}")
+
+                editable = driver.find_elements(
+                    By.CSS_SELECTOR,
+                    '[contenteditable="true"], textarea, input'
+                )
+
+                logging.error(f"DEBUG editable elements found: {len(editable)}")
+
+                for index, element in enumerate(editable):
+                    logging.error(
+                        f"DEBUG editable[{index}]: "
+                        f"tag={element.tag_name}, "
+                        f"outerHTML={element.get_attribute('outerHTML')[:500]}"
+                    )
+
+                matches = driver.find_elements(By.XPATH, CLICK_TARGET_XPATH)
+                logging.error(f"DEBUG XPath matches: {len(matches)}")
+
+            except Exception as debug_error:
+                logging.error(f"DEBUG capture failed: {debug_error}")
             return False
         except Exception as e:
             logging.warning(f"Normal click failed: {e}. Trying JS click...")
@@ -497,9 +534,6 @@ def managed_webdriver():
         opts.add_argument("--disable-software-rasterizer")
 
         # ── RAM optimization ──
-        opts.add_argument("--single-process")        # Reduces memory significantly
-        opts.add_argument("--no-zygote")             # Works with single-process
-        opts.add_argument("--renderer-process-limit=1")
         opts.add_argument("--disable-extensions")
         opts.add_argument("--disable-plugins")
         opts.add_argument("--disable-images")        # Don't load images (saves RAM + bandwidth)

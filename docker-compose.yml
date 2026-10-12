@@ -1,7 +1,7 @@
 services:
   tiktok-streak-bot:
     build: .
-    container_name: tiktok-streak-bot
+    container_name: ahzi-streak
     restart: unless-stopped
     # Chrome needs adequate shared memory — without this it will crash on complex pages
     shm_size: '2gb'
